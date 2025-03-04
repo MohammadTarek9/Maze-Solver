@@ -1,14 +1,22 @@
 def heuristic(node, goal):
-    pass
+    # node and goal are tuples
+    # manhattan distance
+    diff_x = abs(node[0] - goal[0])
+    diff_y = abs(node[1] - goal[1])
+    return diff_x + diff_y
 
 def a_star(graph, start, goal):
-
     pass
+
+
+    
 
 def reconstruct_path(came_from, current):
-
-    pass
-
+    path = []
+    while current in came_from:
+        path.append(current)
+        current = came_from[current]
+    return path
 
 # Example Test Cases
 def test_a_star():
