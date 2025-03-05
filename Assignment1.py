@@ -42,8 +42,13 @@ def reconstruct_path(came_from, current):
     return path
 
 # Example Test Cases
-def test_a_star():
-    pass
+def test_a_star(graph, start, goal):
+    path, cost = a_star(graph, start, goal)
+    if not path:
+        print("No path found")
+    else:
+        print(f"Path: {path}")
+        print(f"Cost: {cost}")
 
 
 def visualize_path():
@@ -120,7 +125,6 @@ print_graph(graph)
 
 # Test the A* algorithm
 start = (0, 0)
-goal = (49, 49)
-shortest_path, total_cost = a_star(graph, start, goal)
-print(f"Shortest path: {shortest_path}")
-print(f"Total cost: {total_cost}")
+goal = (49, 0)
+test_a_star(graph, start, goal)
+
