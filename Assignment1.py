@@ -1,21 +1,44 @@
+import heapq as heap
 def heuristic(node, goal):
-    # node and goal are tuples
     # manhattan distance
     diff_x = abs(node[0] - goal[0])
     diff_y = abs(node[1] - goal[1])
     return diff_x + diff_y
 
 def a_star(graph, start, goal):
-    pass
 
+    shortestPath = []
+    totalCost = 0
+    openList = []
+    heuristic_start = heuristic(start, goal)
+    heap.heappush(openList, (heuristic_start, start))
+    cameFrom = {}
+    accumulated_costs = {start: 0}
+    while openList:
+        current_heuristic, current = heap.heappop(openList)
+        if current == goal:
+            totalCost = accumulated_costs[current]
+            shortestPath = reconstruct_path(cameFrom, current)
+            return shortestPath, totalCost
+        for neighbor in graph[current]:
+            cell = (neighbor[0], neighbor[1])
+            cost = neighbor[2]
+            new_cost = accumulated_costs[current] + cost
+            if cell not in accumulated_costs or new_cost < accumulated_costs[cell]:
+                accumulated_costs[cell] = new_cost
+                heap.heappush(openList, (new_cost + heuristic(cell, goal), cell))
+                cameFrom[cell] = current
+    return shortestPath, totalCost
 
-    
+            
 
 def reconstruct_path(came_from, current):
     path = []
     while current in came_from:
         path.append(current)
         current = came_from[current]
+    path.append(current)
+    path.reverse()
     return path
 
 # Example Test Cases
@@ -94,3 +117,10 @@ graph = create_graph(maze)
 print_maze(maze)
 # Print part of the graph to verify the structure
 print_graph(graph)
+
+# Test the A* algorithm
+start = (0, 0)
+goal = (49, 49)
+shortest_path, total_cost = a_star(graph, start, goal)
+print(f"Shortest path: {shortest_path}")
+print(f"Total cost: {total_cost}")
