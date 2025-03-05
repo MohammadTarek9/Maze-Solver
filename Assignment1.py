@@ -1,4 +1,5 @@
 import heapq as heap
+import pygame
 def heuristic(node, goal):
     # manhattan distance
     diff_x = abs(node[0] - goal[0])
@@ -28,7 +29,7 @@ def a_star(graph, start, goal):
                 accumulated_costs[cell] = new_cost
                 heap.heappush(openList, (new_cost + heuristic(cell, goal), cell))
                 cameFrom[cell] = current
-    return shortestPath, totalCost
+    return [], -1
 
             
 
@@ -42,17 +43,72 @@ def reconstruct_path(came_from, current):
     return path
 
 # Example Test Cases
-def test_a_star(graph, start, goal):
+def test_a_star():
+    # test case 1
+    maze = create_maze(50, 50, 0.2, 0)
+    graph = create_graph(maze)
+    start = (0, 0)
+    goal = (49, 49)
     path, cost = a_star(graph, start, goal)
-    if not path:
-        print("No path found")
-    else:
-        print(f"Path: {path}")
-        print(f"Cost: {cost}")
+    print(f"Path of 1st test case: {path}")
+    print(f"Cost of 1st test case: {cost}")
+    visualize_path(graph, maze, start, goal, path)
+    #test case 2
+    maze = create_maze(60, 60, 0.1, 0.3)    
+    graph = create_graph(maze)
+    start = (0, 0)
+    goal = (59, 59)
+    path, cost = a_star(graph, start, goal)
+    print(f"Path of 2nd test case: {path}")
+    print(f"Cost of 2nd test case: {cost}")
+    visualize_path(graph, maze, start, goal, path)
+    #test case 3
+    maze = create_maze(50, 50, 0.3, 0.5)
+    graph = create_graph(maze)
+    start = (0, 0)
+    goal = (49, 49)
+    path, cost = a_star(graph, start, goal)
+    print(f"Path of 3rd test case: {path}")
+    print(f"Cost of 3rd test case: {cost}")
+    visualize_path(graph, maze, start, goal, path)
 
 
-def visualize_path():
-    pass 
+def visualize_path(graph, maze, start, goal, path):
+    
+    pygame.init()
+    screen = pygame.display.set_mode((800, 800), pygame.RESIZABLE)
+    pygame.display.set_caption("A* Pathfinding")
+    clock = pygame.time.Clock()
+    
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    GREEN = (0, 255, 0)
+    RED = (255, 0, 0)
+    BLUE = (0, 0, 255)
+    
+    cell_size = 12
+    
+    for y, row in enumerate(maze):
+        for x, cell in enumerate(row):
+            color = WHITE if cell != '#' else BLACK
+            pygame.draw.rect(screen, color, (x * cell_size, y * cell_size, cell_size, cell_size))
+            
+    for i, (x, y) in enumerate(path):
+        pygame.draw.rect(screen, BLUE, (x * cell_size, y * cell_size, cell_size, cell_size))
+        pygame.display.flip()
+        clock.tick(20)
+        
+    pygame.draw.rect(screen, GREEN, (start[0] * cell_size, start[1] * cell_size, cell_size, cell_size))
+    pygame.draw.rect(screen, RED, (goal[0] * cell_size, goal[1] * cell_size, cell_size, cell_size))
+    pygame.display.flip()
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                
+    pygame.quit()
 
 
 import random
@@ -125,6 +181,10 @@ print_graph(graph)
 
 # Test the A* algorithm
 start = (0, 0)
-goal = (49, 0)
-test_a_star(graph, start, goal)
+goal = (49, 49)
+path, cost = a_star(graph, start, goal)
+print(f"Path of given graph: {path}")
+print(f"Cost of given graph: {cost}")
+visualize_path(graph, maze, start, goal, path)
 
+test_a_star()
