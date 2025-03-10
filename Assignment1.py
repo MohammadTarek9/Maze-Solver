@@ -83,7 +83,7 @@ def visualize_path(graph, maze, start, goal, path):
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     GREEN = (0, 255, 0)
-    RED = (255, 0, 0)
+    YELLOW = (255, 255, 0)
     BLUE = (0, 0, 255)
     
     cell_size = 12
@@ -99,7 +99,7 @@ def visualize_path(graph, maze, start, goal, path):
         clock.tick(20)
         
     pygame.draw.rect(screen, GREEN, (start[0] * cell_size, start[1] * cell_size, cell_size, cell_size))
-    pygame.draw.rect(screen, RED, (goal[0] * cell_size, goal[1] * cell_size, cell_size, cell_size))
+    pygame.draw.rect(screen, YELLOW, (goal[0] * cell_size, goal[1] * cell_size, cell_size, cell_size))
     pygame.display.flip()
 
     running = True
